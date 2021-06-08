@@ -1,0 +1,25 @@
+version: "3"
+services:
+  php74:
+    build:
+      context: ./services/php74
+      args:
+        PHP_VERSION: php:7.4.7-fpm-alpine
+        CONTAINER_PACKAGE_URL: mirrors.aliyun.com
+        PHP_EXTENSIONS: pdo_mysql,mysqli,mbstring,gd,curl,opcache,exif,gd,bz2,protobuf,gmp,imagick,redis,memcached
+        TZ: "Asia/Shanghai"
+    container_name: php74
+    expose:
+      - 9501
+    volumes:
+      - ../dnmp/www:/www/:rw
+      - ./services/php74/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./services/php74/php-fpm.conf:/usr/local/etc/php-fpm.d/www.conf:rw
+      - ./logs/php74:/var/log/php
+    restart: always
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      - default
+networks:
+  default:
